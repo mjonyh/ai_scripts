@@ -4,34 +4,32 @@ Utility scripts for monitoring and discovering AI models on [OpenRouter](https:/
 
 ## Scripts
 
-### `openrouter_uptime.py`
+### `search_agentic_models.py` (NEW)
 
-Monitor uptime and endpoint health for specific OpenRouter models, or discover
-free agentic text→text models with live endpoint data.
+Search for free agentic text→text models on OpenRouter. Lists up to 10 models with latest uptime and context size.
 
 ```bash
-# Monitor specific models
-python openrouter_uptime.py openrouter/owl-alpha
+# Top 10 free agentic models with live uptime
+python search_agentic_models.py
 
-# Discover free agentic models
-python openrouter_uptime.py --search
+# Limit to 5 results
+python search_agentic_models.py --limit 5
 
-# Discover with live uptime data
-python openrouter_uptime.py --search --monitor
+# JSON output
+python search_agentic_models.py --json
 
-# Limit results
-python openrouter_uptime.py --search --monitor --limit 5
+# Export to file
+python search_agentic_models.py --json-file results.json
+
+# Skip live uptime fetch (faster)
+python search_agentic_models.py --no-monitor
 ```
 
-**Output:** Model name, status, context length, max output, provider,
-quantization, and uptime across 5m / 30m / 1d windows with color indicators
-(🟢 >=99.9%, 🟡 >=99%, 🟠 >=95%, 🔴 <95%).
+**Output:** Ranked table with model name, context length, uptime (5m/1d), status, and provider. JSON mode includes all fields.
 
 ### `openrouter_best_free.py`
 
-Find the best free agentic model on OpenRouter for a specific use case using
-composite scoring. Supports three built-in profiles with different weight
-distributions and keyword bonuses.
+Find the best free agentic model on OpenRouter for a specific use case using composite scoring. Supports three built-in profiles with different weight distributions and keyword bonuses.
 
 ```bash
 # Default agentic profile
@@ -83,6 +81,29 @@ Weights are auto-normalized if they don't sum to 1.0.
 - Runner-up comparison
 - Honorable mentions (largest context, best uptime, largest output)
 
+### `openrouter_uptime.py`
+
+Monitor uptime and endpoint health for specific OpenRouter models, or discover
+free agentic text→text models with live endpoint data.
+
+```bash
+# Monitor specific models
+python openrouter_uptime.py openrouter/owl-alpha
+
+# Discover free agentic models
+python openrouter_uptime.py --search
+
+# Discover with live uptime data
+python openrouter_uptime.py --search --monitor
+
+# Limit results
+python openrouter_uptime.py --search --monitor --limit 5
+```
+
+**Output:** Model name, status, context length, max output, provider,
+quantization, and uptime across 5m / 30m / 1d windows with color indicators
+(🟢 >=99.9%, 🟡 >=99%, 🟠 >=95%, 🔴 <95%).
+
 ## Requirements
 
 - Python 3.10+
@@ -96,6 +117,7 @@ ai_scripts/
   README.md
   pyproject.toml
   main.py                    # entry point (if applicable)
-  openrouter_uptime.py       # uptime monitor & discovery
+  search_agentic_models.py   # NEW: search free agentic models
   openrouter_best_free.py    # best model finder with profiles
+  openrouter_uptime.py       # uptime monitor & discovery
 ```
